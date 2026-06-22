@@ -30,7 +30,7 @@
       --shadow:      0 8px 48px rgba(26,31,46,0.10), 0 2px 8px rgba(26,31,46,0.06);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; background: #fff; }
     body {
       font-family: var(--font-body);
       background: #fff;
@@ -64,7 +64,6 @@
       width: 110px;
       height: 110px;
       object-fit: contain;
-      filter: drop-shadow(0 4px 18px rgba(240,165,0,0.18));
     }
     .org-name {
       font-family: var(--font-display);
@@ -268,22 +267,9 @@
   function getMemberData() {
     var search = window.location.search;
 
-    // ── Format 0 (current): compact query params ?n=&i=&c=&md=&ed= ──
-    // All member data is embedded directly — works from any external scanner,
-    // no server or localStorage needed.
-    var nMatch = search.match(/[?&]n=([^&]*)/);
-    if (nMatch) {
-      try {
-        var pn  = decodeURIComponent(nMatch[1]                               || '');
-        var pi  = decodeURIComponent((search.match(/[?&]i=([^&]*)/)  ||['',''])[1]);
-        var pc  = decodeURIComponent((search.match(/[?&]c=([^&]*)/)  ||['',''])[1]);
-        var pmd = decodeURIComponent((search.match(/[?&]md=([^&]*)/) ||['',''])[1]);
-        var ped = decodeURIComponent((search.match(/[?&]ed=([^&]*)/) ||['',''])[1]);
-        if (pn) return { name: pn, id: pi, club: pc, membershipDate: pmd, expiryDate: ped };
-      } catch(e) { /* fall through */ }
-    }
-
-    // ── Format 1 (legacy): compact ?id= with localStorage lookup ──
+    // ── Format 0 (current): ?id= → localStorage lookup ──
+    // QR encodes the shortest possible URL (just the ID).
+    // Full member record is read from localStorage saved when QR was generated.
     var idMatch = search.match(/[?&]id=([^&]*)/);
     if (idMatch) {
       try {
@@ -291,6 +277,19 @@
         var stored = localStorage.getItem('sc_member_' + scId);
         if (stored) return JSON.parse(stored);
         return { id: scId, _notFound: true };
+      } catch(e) { /* fall through */ }
+    }
+
+    // ── Format 1 (legacy): compact query params ?n=&i=&c=&md=&ed= ──
+    var nMatch = search.match(/[?&]n=([^&]*)/);
+    if (nMatch) {
+      try {
+        var pn  = decodeURIComponent(nMatch[1]                                || '');
+        var pi  = decodeURIComponent((search.match(/[?&]i=([^&]*)/)  ||['',''])[1]);
+        var pc  = decodeURIComponent((search.match(/[?&]c=([^&]*)/)  ||['',''])[1]);
+        var pmd = decodeURIComponent((search.match(/[?&]md=([^&]*)/) ||['',''])[1]);
+        var ped = decodeURIComponent((search.match(/[?&]ed=([^&]*)/) ||['',''])[1]);
+        if (pn) return { name: pn, id: pi, club: pc, membershipDate: pmd, expiryDate: ped };
       } catch(e) { /* fall through */ }
     }
 
