@@ -74,7 +74,7 @@
       text-align: center;
       line-height: 1.25;
     }
-    .org-name span { color: var(--accent); }
+    .org-name span { color: var(--text); }
     .org-sub {
       font-size: 0.72rem;
       letter-spacing: 0.14em;
@@ -168,7 +168,7 @@
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--text-faint);
+      color: var(--text-muted);
       margin-bottom: 5px;
     }
     .field-value {
@@ -179,10 +179,10 @@
       line-height: 1.35;
     }
     .field-value.name-value {
-      font-family: var(--font-display);
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: #1a2d44;
+      font-family: Arial, sans-serif;
+      font-size: 0.97rem;
+      font-weight: 400;
+      color: var(--text);
     }
     .field-value.id-value {
       font-family: 'Courier New', monospace;
@@ -345,7 +345,7 @@
       // Logo block
       '<div class="logo-block">' +
         '<img class="logo-img" src="' + LOGO_B64 + '" alt="Federation of Golf Clubs Philippines Logo"/>' +
-        '<div class="org-name">Federation of Golf Clubs Phils., Inc</div>' +
+        '<div class="org-name">Federation of Golf Clubs Phils., <span>Inc</span></div>' +
         '<div class="org-sub">Senior Care Program</div>' +
       '</div>' +
 
